@@ -9,10 +9,14 @@
             html {
                 touch-action: none;
             }
+            
+            body {
+                background-color: black;
+            }
         </style>
     </head>
     <body>
-        <canvas id="canvas" width="800" height="600" style="border: 1px solid black;">
+        <canvas id="canvas" width="800" height="600" style="border: 1px solid white;">
         </canvas>
         <script>
             const canvas = document.getElementById("canvas");
@@ -170,21 +174,20 @@
                 ctx.textAlign = "left";
                 ctx.textBaseline = "top";
                 ctx.font = "bold 30px sans-serif";
-                ctx.fillStyle = "black";
+                ctx.fillStyle = "white";
                 ctx.fillText("your score: "+score, 5, 5);
                 ctx.fillStyle = "#cc0";
                 if (score < storage.highscore) ctx.fillText("highscore: "+storage.highscore, 5, 30);
                 else if (newHighscore) ctx.fillText("new highscore!", 5, 30);
                 else ctx.fillText("that's your highscore!", 5, 30);
                 ctx.font = "12px sans-serif";
-                ctx.fillStyle = "black";
+                ctx.fillStyle = "white";
                 ctx.textAlign = "right";
                 ctx.fillText(scoreText, canvas.width-5, 5);
                 
                 ctx.textAlign = "left";
                 ctx.textBaseline = "bottom";
                 ctx.font = "bold 30px sans-serif";
-                ctx.fillStyle = "black";
                 ctx.fillText("remaining lives: "+lives, 5, canvas.height-5);
                 
                 if (pointerMode === 1 && pointerDown) {
@@ -343,7 +346,7 @@
                 ctx.fillText("Start!", canvas.width/2, canvas.height/2);
                 
                 ctx.lineWidth = 3;
-                ctx.strokeStyle = "white";
+                ctx.strokeStyle = "black";
                 for (let i = 0; i < 100; i++) {
                     const x1 = canvas.width/2 + Math.sin(Date.now()/34567+i)*100;
                     const x2 = x1 + Math.sin(Date.now()/3000+i*1234)*20;
@@ -369,7 +372,7 @@
                 ctx.fillText("Game over!", canvas.width/2, canvas.height/2);
                 
                 ctx.font = "30px sans-serif";
-                ctx.fillStyle = "black";
+                ctx.fillStyle = "white";
                 ctx.fillText("Try again!", canvas.width/2, canvas.height/2+50);
             }
             
