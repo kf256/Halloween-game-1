@@ -41,6 +41,7 @@
             let score;
             let lives;
             let pumpkins;
+            let newHighscore;
             
             if (localStorage["Halloween game 1"] === undefined) {
                 localStorage["Halloween game 1"] = JSON.stringify({version: "1.0", highscore: null});
@@ -132,7 +133,10 @@
                         if (score > storage.highscore) {
                             storage.highscore = score;
                             localStorage["Halloween game 1"] = JSON.stringify(storage);
+                            newHighscore = true;
                         }
+                        
+                        if (score < storage.highscore) newHighscore = false;
                         
                         pumpkins[i] = newPumpkin();
                     }
@@ -166,7 +170,8 @@
                 ctx.fillText("your score: "+score, 5, 5);
                 ctx.fillStyle = "#cc0";
                 if (score < storage.highscore) ctx.fillText("highscore: "+storage.highscore, 5, 30);
-                else ctx.fillText("new highscore!", 5, 30);
+                else if (newHighscore) ctx.fillText("new highscore!", 5, 30);
+                else ctx.fillText("that's your highscore!", 5, 30);
                 ctx.font = "15px sans-serif";
                 ctx.fillStyle = "black";
                 ctx.textAlign = "right";
@@ -307,6 +312,8 @@
             function startGame() {
                 score = 0;
                 lives = 5;
+                
+                newHighscore = false;
                 
                 pumpkins = [];
                 for (let i = 0; i < pumpkinsNumber; i++) pumpkins[i] = newPumpkin();
