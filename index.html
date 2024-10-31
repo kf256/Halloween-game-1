@@ -64,7 +64,7 @@
                 await waitForImageLoad(evilPumpkins);
                 await waitForImageLoad(veryEvilPumpkins);
                 
-                startGame();
+                drawStartScreen();
             }
             
             function update() {
@@ -270,6 +270,7 @@
             }
             
             function pointer(event) {
+                
                 const rect = canvas.getBoundingClientRect();
                 const x = event.clientX - rect.left;
                 const y = event.clientY - rect.top;
@@ -285,6 +286,8 @@
                 if (event.type === "pointerdown") pointerDown = true;
                 if (event.type === "pointerup") pointerDown = false;
                 if (event.type === "pointercancel") pointerDown = false;
+                
+                if (event.type === "pointerup" && !playing) startGame();
             }
             
             function startGame() {
@@ -300,6 +303,32 @@
                 
                 lastUpdate = Date.now();
                 update();
+            }
+            
+            function drawStartScreen() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.font = "bold 50px sans-serif";
+                ctx.fillStyle = "red";
+                ctx.fillText("Start!", canvas.width/2, canvas.height/2);
+                
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = "white";
+                for (let i = 0; i < 100; i++) {
+                    const x1 = canvas.width/2 + Math.sin(Date.now()/34567+i)*100;
+                    const x2 = x1 + Math.sin(Date.now()/3000+i*1234)*20;
+                    ctx.beginPath();
+                    ctx.moveTo(x1, canvas.height/2-50);
+                    ctx.lineTo(x2, canvas.height/2+50);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+                
+                ctx.fillText("Start!", canvas.width/2, canvas.height/2-5);
+                
+                if (!playing) window.requestAnimationFrame(drawStartScreen);
             }
         </script>
     </body>
