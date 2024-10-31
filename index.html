@@ -59,10 +59,10 @@
             main();
             
             async function main() {
-                waitForImageLoad(animal);
-                waitForImageLoad(friendlyPumpkins);
-                waitForImageLoad(evilPumpkins);
-                waitForImageLoad(veryEvilPumpkins);
+                await waitForImageLoad(animal);
+                await waitForImageLoad(friendlyPumpkins);
+                await waitForImageLoad(evilPumpkins);
+                await waitForImageLoad(veryEvilPumpkins);
                 
                 startGame();
             }
@@ -251,7 +251,6 @@
             
             async function waitForImageLoad(image) {
                 if (image.naturalWidth === 0) await new Promise(r => image.onload = r);
-                return;
             }
             
             function drawPumpkin(pumpkin) {
