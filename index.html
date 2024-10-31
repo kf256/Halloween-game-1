@@ -44,9 +44,13 @@
             let newHighscore;
             
             if (localStorage["Halloween game 1"] === undefined) {
-                localStorage["Halloween game 1"] = JSON.stringify({version: "1.0", highscore: null});
+                localStorage["Halloween game 1"] = JSON.stringify({version: "1.1", highscore: null});
             }
             let storage = JSON.parse(localStorage["Halloween game 1"]);
+            if (storage.version === "1.0") {
+                storage.version = "1.1";
+                localStorage["Halloween game 1"] = JSON.stringify(storage);
+            }
             
             const animal = new Image();
             animal.src = "images/animal.png";
