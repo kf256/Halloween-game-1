@@ -41,6 +41,7 @@
                 start: "Start!",
                 gameOver1: "Game over!",
                 gameOver2: "Try again!",
+                version: "version ",
                 
                 scoreText0: "Oh, you collected an evil pumpkin. Try to avoid them and collect normal ones.",
                 scoreText1: "Let's start collecting pumpkins!",
@@ -60,6 +61,7 @@
                 start: "Starten!",
                 gameOver1: "Spiel zuende!",
                 gameOver2: "Versuch's doch noch mal!",
+                version: "Version ",
                 
                 scoreText0: "Oh, du hast einen bösen Kürbis gesammelt. Weiche ihnen möglichst aus und sammle normale.",
                 scoreText1: "Lass uns anfangen, Kürbisse zu sammeln!",
@@ -413,6 +415,17 @@
                 }
                 
                 ctx.fillText(strings.start, canvas.width/2, canvas.height/2-5);
+                
+                ctx.textAlign = "left";
+                ctx.textBaseline = "top";
+                ctx.font = "20px sans-serif";
+                ctx.fillStyle = "#cc0";
+                ctx.fillText(strings.highscore+storage.highscore, 5, 5);
+                
+                ctx.textAlign = "right";
+                ctx.font = "12px sans-serif";
+                ctx.fillStyle = "white";
+                ctx.fillText(strings.version+storage.version, canvas.width-5, 5);
                 
                 window.requestAnimationFrame(drawStartScreen);
             }
