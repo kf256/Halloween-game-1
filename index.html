@@ -114,6 +114,7 @@
                 localStorage["Halloween game 1"] = JSON.stringify(storage);
             }
             if (storage.version === "1.1") {
+                if (storage.highscore === null) storage.highscore = 0;
                 storage.version = "1.2";
                 localStorage["Halloween game 1"] = JSON.stringify(storage);
             }
