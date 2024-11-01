@@ -162,8 +162,8 @@
                         const angle = Math.atan2(pointerY-pointerStartY, pointerX-pointerStartX);
                         const dist = Math.hypot(pointerY-pointerStartY, pointerX-pointerStartX);
                         
-                        posX += Math.cos(angle) * Math.tanh(dist/100) * delay/2*speed;
-                        posY += Math.sin(angle) * Math.tanh(dist/100) * delay/2*speed;
+                        posX += Math.cos(angle) * Math.tanh(dist/200) * delay/2*speed;
+                        posY += Math.sin(angle) * Math.tanh(dist/200) * delay/2*speed;
                     }
                 }
                 
