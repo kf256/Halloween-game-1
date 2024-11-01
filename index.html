@@ -96,6 +96,7 @@
             const pumpkinsNumber = 5;
             
             let playing = false;
+            let startScreen = false;
             
             let lastUpdate;
             let posX, posY;
@@ -135,6 +136,7 @@
                 await waitForImageLoad(evilPumpkins);
                 await waitForImageLoad(veryEvilPumpkins);
                 
+                startScreen = true;
                 drawStartScreen();
             }
             
@@ -374,7 +376,7 @@
                 if (event.type === "pointerup") pointerDown = false;
                 if (event.type === "pointercancel") pointerDown = false;
                 
-                if (event.type === "pointerup" && !playing) startGame();
+                if (event.type === "pointerup" && startScreen) startGame();
             }
             
             function startGame() {
@@ -389,6 +391,7 @@
                 posX = canvas.width/2;
                 posY = canvas.height/2;
                 
+                startScreen = false;
                 playing = true;
                 
                 lastUpdate = Date.now();
@@ -453,7 +456,10 @@
                 
                 drawGameOverScreen();
                 
-                setTimeout(drawStartScreen, 2000);
+                setTimeout(() => {
+                    startScreen = true;
+                    drawStartScreen();
+                }, 2000);
             }
         </script>
     </body>
