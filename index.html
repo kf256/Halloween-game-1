@@ -14,14 +14,23 @@
             body {
                 background-color: black;
             }
+            
+            canvas {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+            }
         </style>
     </head>
     <body>
-        <canvas id="canvas" width="800" height="600" style="border: 1px solid white;">
+        <canvas id="canvas" width="800" height="600">
         </canvas>
         <script>
             const canvas = document.getElementById("canvas");
             const ctx = canvas.getContext("2d");
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
             
             var pressedKeys = {};
             window.onkeydown = e => pressedKeys[e.key] = true;
@@ -219,6 +228,9 @@
             }
             
             function draw() {
+                if (canvas.width !== window.innerWidth) canvas.width = window.innerWidth;
+                if (canvas.height !== window.innerHeight) canvas.height = window.innerHeight;
+                
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 for (let i = 0; i < pumpkins.length; i++) drawPumpkin(pumpkins[i]);
@@ -401,6 +413,9 @@
             
             function drawStartScreen() {
                 if (playing) return;
+                
+                if (canvas.width !== window.innerWidth) canvas.width = window.innerWidth;
+                if (canvas.height !== window.innerHeight) canvas.height = window.innerHeight;
                 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
