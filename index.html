@@ -25,12 +25,36 @@
     <body>
         <canvas id="canvas" width="800" height="600">
         </canvas>
+        <div id="game">
+            <div style="position: absolute; left: 5px; top: 5px; font: bold 30px sans-serif;">
+                <p id="score" style="color: white;"></p>
+                <p id="highscore_game" style="color: #cc0;"></p>
+            </div>
+            <p id="scoreText" style="position: absolute; right: 5px; top: 5px; font: 12px sans-serif; color: white;"></p>
+            <p id="lives" style="position: absolute; left: 5px; bottom: 5px; font: bold 30px sans-serif; color: white;"></p>
+        </div>
+        <div id="start">
+            <p id="highscore_start" style="position: absolute; left: 5px; top: 5px; font: 20px sans-serif; color: #cc0;"></p>
+            <p id="version" style="position: absolute; right: 5px; top: 5px; font: 12px sans-serif; color: white;"></p>
+        </div>
         <script>
             const canvas = document.getElementById("canvas");
             const ctx = canvas.getContext("2d");
             
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            
+            const displays = {};
+            displays.game = {};
+            displays.game.game = document.getElementById("game");
+            displays.game.score = document.getElementById("score");
+            displays.game.highscore = document.getElementById("highscore_game");
+            displays.game.scoreText = document.getElementById("scoreText");
+            displays.game.lives = document.getElementById("lives");
+            displays.start = {};
+            displays.start.start = document.getElementById("start");
+            displays.start.highscore = document.getElementById("highscore_start");
+            displays.start.version = document.getElementById("version");
             
             var pressedKeys = {};
             window.onkeydown = e => pressedKeys[e.key] = true;
@@ -247,24 +271,15 @@
                 else if (score > 625) scoreText = strings.scoreText6;
                 if (score/storage.highscore > 0.8 && score != storage.highscore) scoreText = strings.scoreText7;
                 
-                ctx.textAlign = "left";
-                ctx.textBaseline = "top";
-                ctx.font = "bold 30px sans-serif";
-                ctx.fillStyle = "white";
-                ctx.fillText(strings.score+score, 5, 5);
-                ctx.fillStyle = "#cc0";
-                if (score < storage.highscore) ctx.fillText(strings.highscore+storage.highscore, 5, 30);
-                else if (newHighscore) ctx.fillText(strings.newHighscore, 5, 30);
-                else ctx.fillText(strings.highscoreReached, 5, 30);
-                ctx.font = "12px sans-serif";
-                ctx.fillStyle = "white";
-                ctx.textAlign = "right";
-                ctx.fillText(scoreText, canvas.width-5, 5);
+                displays.game.score.innerHTML = strings.score + score;
                 
-                ctx.textAlign = "left";
-                ctx.textBaseline = "bottom";
-                ctx.font = "bold 30px sans-serif";
-                ctx.fillText(strings.lives+lives, 5, canvas.height-5);
+                if (score < storage.highscore) displays.game.highscore.innerHTML = strings.highscore + storage.highscore;
+                else if (newHighscore) displays.game.highscore.innerHTML = strings.newHighscore;
+                else displays.game.highscore.innerHTML = strings.highscoreReached;
+                
+                displays.game.scoreText.innerHTML = scoreText;
+                
+                displays.game.lives.innerHTML = strings.lives+lives;
                 
                 if (pointerMode === 1 && pointerDown) {
                     ctx.fillStyle = "#8888";
@@ -404,6 +419,9 @@
                 posX = canvas.width/2;
                 posY = canvas.height/2;
                 
+                displays.game.game.style.display = "";
+                displays.start.start.style.display = "none";
+                
                 startScreen = false;
                 playing = true;
                 
@@ -439,16 +457,9 @@
                 
                 ctx.fillText(strings.start, canvas.width/2, canvas.height/2-5);
                 
-                ctx.textAlign = "left";
-                ctx.textBaseline = "top";
-                ctx.font = "20px sans-serif";
-                ctx.fillStyle = "#cc0";
-                ctx.fillText(strings.highscore+storage.highscore, 5, 5);
+                displays.start.highscore.innerHTML = strings.highscore+storage.highscore;
                 
-                ctx.textAlign = "right";
-                ctx.font = "12px sans-serif";
-                ctx.fillStyle = "white";
-                ctx.fillText(strings.version+storage.version, canvas.width-5, 5);
+                displays.start.version.innerHTML = strings.version+storage.version;
                 
                 window.requestAnimationFrame(drawStartScreen);
             }
@@ -469,6 +480,9 @@
             
             function endGame() {
                 playing = false;
+                
+                displays.game.game.style.display = "none";
+                displays.start.start.style.display = "";
                 
                 drawGameOverScreen();
                 
