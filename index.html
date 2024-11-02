@@ -23,7 +23,7 @@
         </style>
     </head>
     <body>
-        <canvas id="canvas" width="800" height="600">
+        <canvas id="canvas">
         </canvas>
         <div id="game">
             <div style="position: absolute; left: 5px; top: 5px; font: bold 30px sans-serif;">
@@ -40,9 +40,6 @@
         <script>
             const canvas = document.getElementById("canvas");
             const ctx = canvas.getContext("2d");
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
             
             const displays = {};
             displays.game = {};
@@ -125,7 +122,10 @@
             }
             console.log(strings);
             
-            const speed = 1;
+            let canvasSize;
+            
+            let speed, pumpkinsSize, playerSize;
+            
             const pumpkinsNumber = 5;
             
             let playing = false;
@@ -137,6 +137,8 @@
             let lives;
             let pumpkins;
             let newHighscore;
+            
+            updateCanvasSize();
             
             if (localStorage["Halloween game 1"] === undefined) {
                 localStorage["Halloween game 1"] = JSON.stringify({version: "1.2", highscore: 0});
@@ -177,6 +179,8 @@
             function update() {
                 if (!playing) return;
                 
+                updateCanvasSize();
+                
                 const delay = Date.now()-lastUpdate;
                 lastUpdate += delay;
                 
@@ -200,10 +204,10 @@
                     }
                 }
                 
-                if (posX < 30) posX = 30;
-                if (posX > canvas.width-30) posX = canvas.width-30;
-                if (posY < 30) posY = 30;
-                if (posY > canvas.height-30) posY = canvas.height-30;
+                if (posX < playerSize) posX = playerSize;
+                if (posX > canvas.width-playerSize) posX = canvas.width-playerSize;
+                if (posY < playerSize) posY = playerSize;
+                if (posY > canvas.height-playerSize) posY = canvas.height-playerSize;
                 
                 for (let i = 0; i < pumpkins.length; i++) {
                     pumpkins[i].posX += pumpkins[i].vX*delay/5*speed;
@@ -225,7 +229,7 @@
                     if (!pumpkinVisible(pumpkins[i])) pumpkins[i] = newPumpkin();
                     
                     const dist = Math.hypot(posX-pumpkins[i].posX, posY-pumpkins[i].posY);
-                    if (dist < 60) {
+                    if (dist < pumpkinsSize+playerSize) {
                         if (pumpkins[i].evilness === 0) score++;
                         if (pumpkins[i].evilness === 1) score--;
                         if (pumpkins[i].evilness === 2) lives--;
@@ -252,14 +256,11 @@
             }
             
             function draw() {
-                if (canvas.width !== window.innerWidth) canvas.width = window.innerWidth;
-                if (canvas.height !== window.innerHeight) canvas.height = window.innerHeight;
-                
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 for (let i = 0; i < pumpkins.length; i++) drawPumpkin(pumpkins[i]);
                 
-                drawImage(animal, posX, posY, 60);
+                drawImage(animal, posX, posY, playerSize*2);
                 
                 let scoreText;
                 if (score < 0) scoreText = strings.scoreText0;
@@ -359,8 +360,8 @@
                         y = canvas.height/2 + relY;
                     }
                     
-                    x -= Math.cos(posAngle)*30;
-                    y -= Math.sin(posAngle)*30;
+                    x -= Math.cos(posAngle)*pumpkinsSize;
+                    y -= Math.sin(posAngle)*pumpkinsSize;
                     
                     return {posX: x, posY: y, vX: vX, vY: vY, evilness: evilness, appearance: appearance};
                 }
@@ -375,14 +376,14 @@
                 if (pumpkin.evilness === 0) image = friendlyPumpkins;
                 if (pumpkin.evilness === 1) image = evilPumpkins;
                 if (pumpkin.evilness === 2) image = veryEvilPumpkins;
-                drawImage(image, pumpkin.posX, pumpkin.posY, 60, pumpkin.appearance);
+                drawImage(image, pumpkin.posX, pumpkin.posY, pumpkinsSize*2, pumpkin.appearance);
             }
             
             function pumpkinVisible(pumpkin) {
-                if (pumpkin.posX < -30) return false;
-                if (pumpkin.posX > canvas.width+30) return false;
-                if (pumpkin.posY < -30) return false;
-                if (pumpkin.posY > canvas.height+30) return false;
+                if (pumpkin.posX < -pumpkinsSize) return false;
+                if (pumpkin.posX > canvas.width+pumpkinsSize) return false;
+                if (pumpkin.posY < -pumpkinsSize) return false;
+                if (pumpkin.posY > canvas.height+pumpkinsSize) return false;
                 return true;
             }
             
@@ -490,6 +491,19 @@
                     startScreen = true;
                     drawStartScreen();
                 }, 2000);
+            }
+            
+            function updateCanvasSize() {
+                if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    
+                    canvasSize = Math.hypot(canvas.width, canvas.height);
+                    
+                    speed = canvasSize/1000;
+                    pumpkinsSize = canvasSize/40;
+                    playerSize = canvasSize/40;
+                }
             }
         </script>
     </body>
